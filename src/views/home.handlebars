@@ -1,0 +1,37 @@
+<textarea class="form-control" id="note" rows="14"></textarea> <br />
+<button class="btn btn-primary form-control" onclick="submit()">Submit</button>
+
+<div id="results" style="font-size: 40px;margin-top:10px;text-align:center;display:none;">
+  <div class="input-group">
+    <span class="input-group-addon" id="basic-addon1">URL:</span>
+    <input type="text" class="form-control" id="url" />
+    <span onclick="copyUrl()" id="copy" class="input-group-addon" style="cursor:pointer;">Copy</span>
+  </div>
+</div>
+
+
+<script>
+  function submit() {
+    const note = document.getElementById('note').value;
+    const opts = {note: note};
+    fetch('/create', {
+      method: 'post',
+      body: JSON.stringify(opts),
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    }).then(function(response) {
+      return response.json();
+    }).then(function(data) {
+      document.getElementById('url').value = data.url;
+      document.getElementById('results').style.display = 'block';
+    });
+  }
+  
+  function copyUrl() {
+    document.getElementById('url').select();
+    document.execCommand('copy');
+    document.getElementById('copy').innerHTML = 'Copied!';
+  }
+
+</script>
