@@ -28,5 +28,5 @@ let db = MongoClient.connect(config.environment.mongourl, (err, database) => {
     app.use((req, res) => {
       res.render('404');
     });
-  })
+  });
 });

@@ -23,8 +23,7 @@ module.exports = ({ db }) => {
   });
 
   api.get('/api/read/:key/:pass', (req, res) => {
-    const key = req.params.key;
-    const pass = req.params.pass;
+    const {key, pass} = req.params;
     db.collection('Notes').findOne({key}, (err, result) => {
       let message = '';
       let note = null;
@@ -60,8 +59,22 @@ module.exports = ({ db }) => {
   });
 
   api.get('/read/:key/:pass', (req, res) => {
-    const key = req.params.key;
-    const pass = req.params.pass;
+    const {key, pass} = req.params;
+    db.collection('Notes').findOne({key}, (err, result) => {
+      let message = '';
+      let note = null;
+      if (err || !result) {
+        message = 'Could not find note, perhaps it has already been destroyed?';
+        res.render('read', {note, message});
+      } else {
+        const destroyUrl = `${config.publicUrl}/read/${key}/${pass}/destroy`;
+        res.render('areyousure', {destroyUrl});
+      }
+    });
+  });
+
+  api.get('/read/:key/:pass/destroy', (req, res) => {
+    const {key, pass} = req.params;
     db.collection('Notes').findOne({key}, (err, result) => {
       let message = '';
       let note = null;
