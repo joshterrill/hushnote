@@ -1,5 +1,6 @@
 <textarea class="form-control" id="note" rows="14"></textarea> <br />
 <button class="btn btn-primary form-control" onclick="submit()">Submit</button>
+<button class="btn btn-default form-control" style="margin-top:8px;" onclick="restart()">Clear</button>
 
 <div id="results" style="font-size: 40px;margin-top:10px;text-align:center;display:none;">
   <div class="input-group">
@@ -32,6 +33,12 @@
     document.getElementById('url').select();
     document.execCommand('copy');
     document.getElementById('copy').innerHTML = 'Copied!';
+  }
+
+  function restart() {
+    document.getElementById('note').value = '';
+    document.getElementById('url').value = '';
+    document.getElementById('results').style.display = 'none';
   }
 
 </script>
