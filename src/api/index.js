@@ -64,6 +64,8 @@ module.exports = ({ db }) => {
       let message = '';
       let note = null;
       if (err || !result) {
+        console.log(err)
+        console.log(result)
         message = 'Could not find note, perhaps it has already been destroyed?';
         res.render('read', {note, message});
       } else {
@@ -75,6 +77,7 @@ module.exports = ({ db }) => {
 
   api.get('/read/:key/:pass/destroy', (req, res) => {
     const {key, pass} = req.params;
+    const set = req.query.set || false
     db.collection('Notes').findOne({key}, (err, result) => {
       let message = '';
       let note = null;
@@ -84,18 +87,26 @@ module.exports = ({ db }) => {
       } else {
         note = util.decrypt(result.note, key + pass);
         const ascii = util.isASCII(note);
-        db.collection('Notes').deleteOne({_id: new mongodb.ObjectID(result._id)}, (error, result) => {
-          message = 'Note has been destroyed.';
-          if (ascii) {
-            res.render('read', {note, message});
-          } else {
-            message = 'Incorrect URL parameters. Note has been destroyed.'
-            res.render('read', {note: null, message})
-          }
-        });
+        ascii && res.render('read', {note, message});
+        if(set) {
+          setTimeout(() => deleteMessage(db, result), 3600000)
+        }
+        else{
+          deleteMessage(db, result)
+        } 
       }
     });
   });
 
   return api;
 }
+
+const deleteMessage = (db, result) => {
+  db.collection('Notes').deleteOne({_id: new mongodb.ObjectID(result._id)}, (error, result) => {
+      if(!error) {
+        console.log('message is deleted')
+      }
+    });
+}
+
+3600000
