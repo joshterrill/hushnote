@@ -50,9 +50,10 @@ module.exports = ({ db }) => {
     const plainTextNote = req.body.note;
     const key = util.guid();
     const pass = util.guid();
+    const destroy = req.body.destroy
     const note = util.encrypt(plainTextNote, key + pass);
     const url = `${config.publicUrl}/read/${key}/${pass}`;
-    db.collection('Notes').insertOne({key, note}, (err, result) => {
+    db.collection('Notes').insertOne({key, note, destroy, createdAt: new Date()}, (err, result) => {
       if (err) res.json({error: 'Error creating note, please try again later.'});
       res.json({url, error: null});
     });
@@ -88,12 +89,9 @@ module.exports = ({ db }) => {
         note = util.decrypt(result.note, key + pass);
         const ascii = util.isASCII(note);
         ascii && res.render('read', {note, message});
-        if(set) {
-          setTimeout(() => deleteMessage(db, result), 3600000)
-        }
-        else{
+        if(result.destroy) {
           deleteMessage(db, result)
-        } 
+        }
       }
     });
   });

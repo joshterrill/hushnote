@@ -22,6 +22,9 @@ app.set('views', __dirname + '/views/');
 let db = MongoClient.connect(config.environment.mongourl, (err, database) => {
   if (err) return console.log(err)
   db = database
+  db.collection("Notes").createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 }, (err, result) => {
+  	console.log('done')
+  })
   app.listen(port, () => {
     console.log('Listening on port ' + port);
     app.use(api({ db }));
