@@ -9,6 +9,7 @@ const MongoClient = mongodb.MongoClient;
 
 const app = express();
 const port = process.env.PORT || config.port || 3000;
+const host = process.env.HOST || config.host || '0.0.0.0';
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
@@ -22,7 +23,7 @@ app.set('views', __dirname + '/views/');
 let db = MongoClient.connect(config.environment.mongourl, (err, database) => {
   if (err) return console.log(err)
   db = database
-  app.listen(port, () => {
+  app.listen(port, host, () => {
     console.log('Listening on port ' + port);
     app.use(api({ db }));
     app.use((req, res) => {
