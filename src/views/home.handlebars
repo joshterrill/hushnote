@@ -1,4 +1,7 @@
-<textarea class="form-control" id="note" rows="14"></textarea> <br />
+<textarea class="form-control" id="note" rows="14"></textarea> <br /> <div>
+  <input type="checkbox" id="exp_check" onclick="toggleTTL()">Enable time-base note destruction</input>
+  <span id="time_input" style="display: none;">Minutes: <input type="text" id="exp_time" value="60" /><br/></span>
+</div>
 <button class="btn btn-primary form-control" onclick="submit()">Submit</button>
 <button class="btn btn-default form-control" style="margin-top:8px;" onclick="restart()">Clear</button>
 
@@ -14,7 +17,11 @@
 <script>
   function submit() {
     const note = document.getElementById('note').value;
-    const opts = {note: note};
+    let ttl = 0;
+    if (document.getElementById('exp_check').checked) {
+      ttl = document.getElementById('exp_time').value;
+    }
+    const opts = { note: note, ttl: ttl};
     fetch('/create', {
       method: 'post',
       body: JSON.stringify(opts),
@@ -39,6 +46,15 @@
     document.getElementById('note').value = '';
     document.getElementById('url').value = '';
     document.getElementById('results').style.display = 'none';
+    document.getElementById('time_input').style.display = 'none';
+  }
+
+  function toggleTTL() {
+    if (document.getElementById('exp_check').checked) {
+      document.getElementById('time_input').style.display = 'inline';
+    } else {
+      document.getElementById('time_input').style.display = 'none';
+    }
   }
 
 </script>

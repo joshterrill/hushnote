@@ -48,11 +48,13 @@ module.exports = ({ db }) => {
   
   api.post('/create', (req, res) => {
     const plainTextNote = req.body.note;
+    const ttl = req.body.ttl * 60 * 1000;
     const key = util.guid();
     const pass = util.guid();
     const note = util.encrypt(plainTextNote, key + pass);
     const url = `${config.publicUrl}/read/${key}/${pass}`;
-    db.collection('Notes').insertOne({key, note}, (err, result) => {
+    const timestamp = new Date().getTime();
+    db.collection('Notes').insertOne({key, note, ttl, timestamp}, (err, result) => {
       if (err) res.json({error: 'Error creating note, please try again later.'});
       res.json({url, error: null});
     });
@@ -63,8 +65,13 @@ module.exports = ({ db }) => {
     db.collection('Notes').findOne({key}, (err, result) => {
       let message = '';
       let note = null;
+      const current = new Date().getTime();
       if (err || !result) {
         message = 'Could not find note, perhaps it has already been destroyed?';
+        res.render('read', {note, message});
+      } else if (current >= (result.ttl + result.timestamp)) {
+        message = 'The note you want to read had a time limit and it has expired'
+        db.collection('Notes').deleteOne({ _id: result._id});
         res.render('read', {note, message});
       } else {
         const destroyUrl = `${config.publicUrl}/read/${key}/${pass}/destroy`;
