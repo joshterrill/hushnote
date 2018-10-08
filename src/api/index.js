@@ -50,9 +50,19 @@ module.exports = ({ db }) => {
     const plainTextNote = req.body.note;
     const key = util.guid();
     const pass = util.guid();
+    const { destroy, hours } = req.body
     const note = util.encrypt(plainTextNote, key + pass);
     const url = `${config.publicUrl}/read/${key}/${pass}`;
-    db.collection('Notes').insertOne({key, note}, (err, result) => {
+    const date = Date.now()
+    const validTill = date + (hours*3600*1000)
+    const queryObj = {
+      key,
+      note,
+      destroy,
+      read: false,
+      validTill
+    }
+    db.collection('Notes').insertOne(queryObj, (err, result) => {
       if (err) res.json({error: 'Error creating note, please try again later.'});
       res.json({url, error: null});
     });
@@ -75,6 +85,7 @@ module.exports = ({ db }) => {
 
   api.get('/read/:key/:pass/destroy', (req, res) => {
     const {key, pass} = req.params;
+    const set = req.query.set || false
     db.collection('Notes').findOne({key}, (err, result) => {
       let message = '';
       let note = null;
@@ -84,18 +95,24 @@ module.exports = ({ db }) => {
       } else {
         note = util.decrypt(result.note, key + pass);
         const ascii = util.isASCII(note);
-        db.collection('Notes').deleteOne({_id: new mongodb.ObjectID(result._id)}, (error, result) => {
-          message = 'Note has been destroyed.';
-          if (ascii) {
-            res.render('read', {note, message});
-          } else {
-            message = 'Incorrect URL parameters. Note has been destroyed.'
-            res.render('read', {note: null, message})
-          }
-        });
+        ascii && res.render('read', {note, message});
+        if(result.destroy) {
+          deleteMessage(db, result)
+        }
+        else{
+          db.collection('Notes').findOneAndUpdate({ _id: result._id }, { $set: { read: true }})
+        }
       }
     });
   });
 
   return api;
+}
+
+const deleteMessage = (db, result) => {
+  db.collection('Notes').deleteOne({_id: new mongodb.ObjectID(result._id)}, (error, result) => {
+      if(!error) {
+        console.log('message is deleted')
+      }
+    });
 }

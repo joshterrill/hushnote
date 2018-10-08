@@ -5,6 +5,7 @@ const mongodb = require('mongodb');
 const exphbs = require('express-handlebars');
 const api = require('./api');
 const config = require('./config.json');
+var cron = require('node-cron');
 const MongoClient = mongodb.MongoClient;
 
 const app = express();
@@ -22,6 +23,10 @@ app.set('views', __dirname + '/views/');
 let db = MongoClient.connect(config.environment.mongourl, (err, database) => {
   if (err) return console.log(err)
   db = database
+  
+  cronJob(db)
+  // dropIndex(db)
+
   app.listen(port, () => {
     console.log('Listening on port ' + port);
     app.use(api({ db }));
@@ -30,3 +35,29 @@ let db = MongoClient.connect(config.environment.mongourl, (err, database) => {
     });
   });
 });
+
+const cronJob = (db) => {
+  cron.schedule('* * * * *', () => {
+    let date = Date.now()
+    let query = { validTill: { "$lte": date }, read: true }
+    db.collection('Notes').deleteMany(query, (err) => {
+      if(err) {
+        console.log(err)
+      }
+      else{
+        console.log('Cron Job says: i have deleted messages')
+      }
+    })
+  });
+}
+
+const dropIndex = (db) => {
+  db.collection("Notes").dropIndex({createdAt: 1}, (err) => {
+    if(err) {
+      console.log(err)
+    }
+    else{
+      console.log("Indexed Drop")
+    }
+  })
+}
