@@ -74,8 +74,6 @@ module.exports = ({ db }) => {
       let message = '';
       let note = null;
       if (err || !result) {
-        console.log(err)
-        console.log(result)
         message = 'Could not find note, perhaps it has already been destroyed?';
         res.render('read', {note, message});
       } else {
