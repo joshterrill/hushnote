@@ -50,10 +50,19 @@ module.exports = ({ db }) => {
     const plainTextNote = req.body.note;
     const key = util.guid();
     const pass = util.guid();
-    const destroy = req.body.destroy
+    const { destroy, hours } = req.body
     const note = util.encrypt(plainTextNote, key + pass);
     const url = `${config.publicUrl}/read/${key}/${pass}`;
-    db.collection('Notes').insertOne({key, note, destroy, createdAt: new Date()}, (err, result) => {
+    const date = Date.now()
+    const validTill = date + (hours*3600*1000)
+    const queryObj = {
+      key,
+      note,
+      destroy,
+      read: false,
+      validTill
+    }
+    db.collection('Notes').insertOne(queryObj, (err, result) => {
       if (err) res.json({error: 'Error creating note, please try again later.'});
       res.json({url, error: null});
     });
@@ -92,6 +101,9 @@ module.exports = ({ db }) => {
         if(result.destroy) {
           deleteMessage(db, result)
         }
+        else{
+          db.collection('Notes').findOneAndUpdate({ _id: result._id }, { $set: { read: true }})
+        }
       }
     });
   });
@@ -106,5 +118,3 @@ const deleteMessage = (db, result) => {
       }
     });
 }
-
-3600000

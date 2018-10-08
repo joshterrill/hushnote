@@ -1,8 +1,9 @@
 <textarea class="form-control" id="note" rows="14"></textarea> <br />
-<input id="checkbox" type="checkbox" name="destroy" checked> Do you want message to be destroyed after it is read.?<br>
+<input id="checkbox" type="checkbox" name="destroy" checked onChange="handleCheck()"> Do you want message to be destroyed after it is read.?<br>
+Hours after which you want message to be deleted
+<input id="hours" type="number" name="hours" min="1" disabled>
 <button class="btn btn-primary form-control" onclick="submit()">Submit</button>
 <button class="btn btn-default form-control" style="margin-top:8px;" onclick="restart()">Clear</button>
-<h6>All messages are valid for only 1 hour, After that they will be automatically destroyed</h6>
 
 <div id="results" style="font-size: 40px;margin-top:10px;text-align:center;display:none;">
   <div class="input-group">
@@ -14,11 +15,18 @@
 
 
 <script>
+  function handleCheck() {
+    const destroy = document.getElementById('checkbox').checked
+    if(!destroy) {
+      document.getElementById("hours").removeAttribute("disabled");
+    }
+  }
+
   function submit() {
     const note = document.getElementById('note').value;
     const destroy = document.getElementById('checkbox').checked;
-    console.log(destroy)
-    const opts = {note: note, destroy};
+    const hours = document.getElementById('hours').value;
+    const opts = {note, destroy, hours};
     fetch('/create', {
       method: 'post',
       body: JSON.stringify(opts),
