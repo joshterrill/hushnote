@@ -69,13 +69,17 @@ module.exports = ({ db }) => {
       if (err || !result) {
         message = 'Could not find note, perhaps it has already been destroyed?';
         res.render('read', {note, message});
-      } else if (current >= ((result.ttl * 1000) + result.timestamp)) {
-        message = 'The note you want to read had a time limit and it has expired'
-        db.collection('Notes').deleteOne({ _id: result._id});
-        res.render('read', {note, message});
-      } else {
+      } else if (result.ttl == 0) { //Regular note
         const destroyUrl = `${config.publicUrl}/read/${key}/${pass}/destroy`;
         res.render('areyousure', {destroyUrl});
+      } else { // Timed note
+        if (current >= ((result.ttl * 1000) + result.timestamp)) { // Expired
+          message = 'The note you want to read had a time limit and it has expired'
+          db.collection('Notes').deleteOne({ _id: result._id});
+        } else {
+          note = util.decrypt(result.note, key + pass);
+        }
+        res.render('read', {note, message});
       }
     });
   });
