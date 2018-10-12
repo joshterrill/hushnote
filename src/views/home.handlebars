@@ -2,7 +2,7 @@
   <input type="radio" name="message-type" value="onread" checked onchange="change(event)" /> Destroy message after being read <br />
   <input id="ttl" type="radio" name="message-type" value="aftertime" onchange="change(event)" /> Destroy message after <input class="time-input" id="ttl-number" type="number" style="width: 40px" min="0" disabled />
   <select class="time-input" id="ttl-unit" disabled>
-    <option value="0">Select One</option>
+    <option value="null">Select One</option>
     <option value="60">Minutes</option>
     <option value="3600">Hours</option>
     <option value="84600">Days</options>
@@ -22,6 +22,10 @@
 
 <script>
   function submit() {
+    if (document.getElementById('ttl').checked && (document.getElementById('ttl-unit').value === 'null' || document.getElementById('ttl-number').value === '')) {
+      alert('You must enter a time and unit');
+      return;
+    }
     const note = document.getElementById('note').value;
     let ttl = 0;
     if (document.getElementById('ttl').checked) {
@@ -52,18 +56,18 @@
     document.getElementById('note').value = '';
     document.getElementById('url').value = '';
     document.getElementById('results').style.display = 'none';
-    document.getElementById('time_input').style.display = 'none';
   }
   
   function change(event) {
     if (event.target.value === 'aftertime') {
       document.querySelectorAll('.time-input').forEach(input => input.disabled = false);
-      document.getElementById('ttl-unit').value = 0;
+      document.getElementById('ttl-unit').value = null;
     } else {
       document.querySelectorAll('.time-input').forEach(input => {
         input.value = null;
         input.disabled = true;
       });
     }
+    document.getElementById('results').style.display = 'none';
   }
 </script>
