@@ -58,6 +58,7 @@
   function change(event) {
     if (event.target.value === 'aftertime') {
       document.querySelectorAll('.time-input').forEach(input => input.disabled = false);
+      document.getElementById('ttl-unit').value = 0;
     } else {
       document.querySelectorAll('.time-input').forEach(input => {
         input.value = null;
