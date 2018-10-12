@@ -45,6 +45,18 @@ Incorrect Pass Response:
 
 ## Spinning up your own instance
 
+### Using Lando (https://docs.devwithlando.io/installation/installing.html)
+
+1. Install Lando if you still dont have it (https://docs.devwithlando.io/installation/installing.html)
+
+2. Check out the project by cloning it `git clone https://github.com/joshterrill/hushnote` and then `cd hushnote/`
+
+3. Copy the `src/config.json.lando` file to `config.json` by typing `cp src/config.json.lando src/config.json`
+
+4. Start your local environment by running `lando start`. After a few minutes you should be able to access your local environment by going to `https://hushnote.lndo.site` in your browser
+
+### Manually
+
 1. Check out the project by cloning it `git clone https://github.com/joshterrill/hushnote` and then `cd hushnote/`
 
 2. Install dependencies by typing `npm install`

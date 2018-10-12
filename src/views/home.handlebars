@@ -1,4 +1,13 @@
-<textarea class="form-control" id="note" rows="14"></textarea> <br />
+<textarea class="form-control" id="note" rows="14"></textarea> <br /> <div>
+  <input type="radio" name="message-type" value="onread" checked onchange="change(event)" /> Destroy message after being read <br />
+  <input id="ttl" type="radio" name="message-type" value="aftertime" onchange="change(event)" /> Destroy message after <input class="time-input" id="ttl-number" type="number" style="width: 40px" min="0" disabled />
+  <select class="time-input" id="ttl-unit" disabled>
+    <option value="0">Select One</option>
+    <option value="60">Minutes</option>
+    <option value="3600">Hours</option>
+    <option value="84600">Days</options>
+  </select>
+</div>
 <button class="btn btn-primary form-control" onclick="submit()">Submit</button>
 <button class="btn btn-default form-control" style="margin-top:8px;" onclick="restart()">Clear</button>
 
@@ -14,7 +23,11 @@
 <script>
   function submit() {
     const note = document.getElementById('note').value;
-    const opts = {note: note};
+    let ttl = 0;
+    if (document.getElementById('ttl').checked) {
+      ttl = document.getElementById('ttl-number').value * document.getElementById('ttl-unit').value;
+    }
+    const opts = { note: note, ttl: ttl};
     fetch('/create', {
       method: 'post',
       body: JSON.stringify(opts),
@@ -39,6 +52,18 @@
     document.getElementById('note').value = '';
     document.getElementById('url').value = '';
     document.getElementById('results').style.display = 'none';
+    document.getElementById('time_input').style.display = 'none';
   }
-
+  
+  function change(event) {
+    if (event.target.value === 'aftertime') {
+      document.querySelectorAll('.time-input').forEach(input => input.disabled = false);
+      document.getElementById('ttl-unit').value = 0;
+    } else {
+      document.querySelectorAll('.time-input').forEach(input => {
+        input.value = null;
+        input.disabled = true;
+      });
+    }
+  }
 </script>

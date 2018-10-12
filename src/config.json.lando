@@ -1,0 +1,10 @@
+{
+  "port": 80,
+  "host": "0.0.0.0",
+  "algorithm": "aes-256-ctr",
+  "publicUrl": "https://hushnote.lndo.site",
+  "secret": "SOME_SECRET_KEY_HERE",
+  "environment": {
+    "mongourl": "mongodb://database:27017/test"
+  }
+}
