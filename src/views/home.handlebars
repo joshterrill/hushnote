@@ -1,21 +1,22 @@
-<textarea class="form-control" id="note" rows="14"></textarea> <br /> <div>
-  <input type="radio" name="message-type" value="onread" checked onchange="change(event)" /> Destroy message after being read <br />
+<textarea aria-label="Type message here" placeholder="Type message here" class="form-control" id="note" rows="14"></textarea> <br />
+<div>
+  <input type="radio" name="message-type" value="onread" checked onchange="change(event)" aria-checked="true" aria-label="Destroy message after being read" /> Destroy message after being read <br />
   <input id="ttl" type="radio" name="message-type" value="aftertime" onchange="change(event)" /> Destroy message after <input class="time-input" id="ttl-number" type="number" style="width: 40px" min="0" disabled />
-  <select class="time-input" id="ttl-unit" disabled>
+  <select class="time-input" id="ttl-unit" disabled aria-label="Destroy message after minutes, hours, days">
     <option value="null">Select One</option>
     <option value="60">Minutes</option>
     <option value="3600">Hours</option>
     <option value="84600">Days</options>
   </select>
 </div>
-<button class="btn btn-primary form-control" onclick="submit()">Submit</button>
-<button class="btn btn-default form-control" style="margin-top:8px;" onclick="restart()">Clear</button>
+<button class="btn btn-primary form-control" onclick="submit()" aria-label="Submit">Submit</button>
+<button class="btn btn-default form-control" style="margin-top:8px;" onclick="restart()" aria-label="Clear">Clear</button>
 
 <div id="results" style="font-size: 40px;margin-top:10px;text-align:center;display:none;">
   <div class="input-group">
     <span class="input-group-addon" id="basic-addon1">URL:</span>
-    <input type="text" class="form-control" id="url" />
-    <span onclick="copyUrl()" id="copy" class="input-group-addon" style="cursor:pointer;">Copy</span>
+    <input type="text" class="form-control" id="url" aria-label="Generated link to share" />
+    <span onclick="copyUrl()" id="copy" class="input-group-addon" style="cursor:pointer;" aria-label="Copy shareable link">Copy</span>
   </div>
 </div>
 
