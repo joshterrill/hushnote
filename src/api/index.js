@@ -1,7 +1,6 @@
 const Router = require('express').Router
 const mongodb = require('mongodb');
 const util = require('../helpers/util.helpers');
-const config = require('../config.json');
 
 module.exports = ({ db }) => {
   const api = Router();
@@ -15,7 +14,7 @@ module.exports = ({ db }) => {
     const key = util.guid();
     const pass = util.guid();
     const note = util.encrypt(plainTextNote, key + pass);
-    const url = `${config.publicUrl}/api/read/${key}/${pass}`;
+    const url = `/api/read/${key}/${pass}`;
     db.collection('Notes').insertOne({key, note}, (err, result) => {
       if (err) res.json({error: 'Error creating note, please try again later.'});
       res.json({url, error: null});
@@ -52,7 +51,7 @@ module.exports = ({ db }) => {
     const key = util.guid();
     const pass = util.guid();
     const note = util.encrypt(plainTextNote, key + pass);
-    const url = `${config.publicUrl}/read/${key}/${pass}`;
+    const url = `/read/${key}/${pass}`;
     const timestamp = new Date().getTime();
     db.collection('Notes').insertOne({key, note, ttl, timestamp}, (err, result) => {
       if (err) res.json({error: 'Error creating note, please try again later.'});
@@ -70,7 +69,7 @@ module.exports = ({ db }) => {
         message = 'Could not find note, perhaps it has already been destroyed?';
         res.render('read', {note, message});
       } else if (result.ttl == 0) { //Regular note
-        const destroyUrl = `${config.publicUrl}/read/${key}/${pass}/destroy`;
+        const destroyUrl = `/read/${key}/${pass}/destroy`;
         res.render('areyousure', {destroyUrl});
       } else { // Timed note
         if (current >= ((result.ttl * 1000) + result.timestamp)) { // Expired

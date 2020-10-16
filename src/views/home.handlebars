@@ -42,8 +42,11 @@
     }).then(function(response) {
       return response.json();
     }).then(function(data) {
-      document.getElementById('url').value = data.url;
+      const urlInput = document.getElementById('url');
+      urlInput.value = data.url;
       document.getElementById('results').style.display = 'block';
+      urlInput.focus();
+      document.getElementById('note').value = '';
     });
   }
   

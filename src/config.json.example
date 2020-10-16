@@ -1,9 +1,0 @@
-{
-  "port": 3000,
-  "algorithm": "aes-256-ctr",
-  "publicUrl": "https://hushnote.herokuapp.com",
-  "secret": "SOME_SECRET_KEY_HERE",
-  "environment": {
-    "mongourl": "mongodb://<username>:<password>@ds127963.mlab.com:27963/<db_name>"
-  }
-}
