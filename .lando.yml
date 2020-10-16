@@ -1,9 +1,0 @@
-name: hush-note
-recipe: mean
-services:
-  appserver:
-    type: node:8.9
-    command: 'npm install && npm start'
-  database:
-    type: mongo:3.4
-    config: lando-configs/mongo-config.yml

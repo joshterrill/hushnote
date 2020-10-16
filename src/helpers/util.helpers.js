@@ -1,5 +1,4 @@
 const crypto = require('crypto');
-const config = require('../config.json');
 
 module.exports = {
   guid() {
@@ -12,15 +11,15 @@ module.exports = {
   },
 
   encrypt(text, password){
-    var cipher = crypto.createCipher(config.algorithm, password + config.secret)
-    var crypted = cipher.update(text,'utf8','hex')
+    var cipher = crypto.createCipheriv(process.env.ALGORITHM, password + process.env.SECRET)
+    var crypted = cipher.update(text, 'utf8', 'hex')
     crypted += cipher.final('hex');
     return crypted;
   },
  
   decrypt(text, password){
-    var decipher = crypto.createDecipher(config.algorithm, password + config.secret)
-    var dec = decipher.update(text,'hex','utf8')
+    var decipher = crypto.createCipheriv(process.env.ALGORITHM, password + process.env.SECRET)
+    var dec = decipher.update(text, 'hex', 'utf8')
     dec += decipher.final('utf8');
     return dec;
   },
