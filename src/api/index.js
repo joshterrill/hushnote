@@ -5,7 +5,7 @@ const util = require('../helpers/util.helpers');
 module.exports = ({ db }) => {
   const api = Router();
 
-  api.get('/', (req, res) => {  
+  api.get('/', (req, res) => {
   	res.render('home');
   });
 
@@ -44,7 +44,7 @@ module.exports = ({ db }) => {
       }
     });
   });
-  
+
   api.post('/create', (req, res) => {
     const plainTextNote = req.body.note;
     const ttl = req.body.ttl;
