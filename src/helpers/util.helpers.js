@@ -1,4 +1,5 @@
 const crypto = require('crypto');
+const iv = crypto.randomBytes(16);
 
 module.exports = {
   guid() {
@@ -11,14 +12,14 @@ module.exports = {
   },
 
   encrypt(text, password){
-    var cipher = crypto.createCipheriv(process.env.ALGORITHM, password + process.env.SECRET)
+    var cipher = crypto.createCipheriv(process.env.ALGORITHM, (password + process.env.SECRET).substr(0, 32), iv)
     var crypted = cipher.update(text, 'utf8', 'hex')
     crypted += cipher.final('hex');
     return crypted;
   },
- 
+
   decrypt(text, password){
-    var decipher = crypto.createCipheriv(process.env.ALGORITHM, password + process.env.SECRET)
+    var decipher = crypto.createCipheriv(process.env.ALGORITHM, (password + process.env.SECRET).substr(0, 32), iv)
     var dec = decipher.update(text, 'hex', 'utf8')
     dec += decipher.final('utf8');
     return dec;
