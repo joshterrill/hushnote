@@ -14,7 +14,7 @@ module.exports = ({ db }) => {
     const key = util.guid();
     const pass = util.guid();
     const note = util.encrypt(plainTextNote, key + pass);
-    const url = `/api/read/${key}/${pass}`;
+    const url = (process.env.PUBLIC_URL || '') + `/api/read/${key}/${pass}`;
     db.collection('Notes').insertOne({key, note}, (err, result) => {
       if (err) res.json({error: 'Error creating note, please try again later.'});
       res.json({url, error: null});
