@@ -31,7 +31,7 @@ module.exports = ({ db }) => {
         res.json({note, message});
       } else {
         note = util.decrypt(result.note, key + pass);
-        const ascii = util.isASCII(note);
+        const ascii = util.isASCII(key + pass);
         db.collection('Notes').deleteOne({_id: new mongodb.ObjectID(result._id)}, (error, result) => {
           message = 'Note has been destroyed.';
           if (ascii) {
@@ -93,7 +93,7 @@ module.exports = ({ db }) => {
         res.render('read', {note, message});
       } else {
         note = util.decrypt(result.note, key + pass);
-        const ascii = util.isASCII(note);
+        const ascii = util.isASCII(key + pass);
         db.collection('Notes').deleteOne({_id: new mongodb.ObjectID(result._id)}, (error, result) => {
           message = 'Note has been destroyed.';
           if (ascii) {
