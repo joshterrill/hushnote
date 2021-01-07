@@ -51,6 +51,6 @@ Incorrect Pass Response:
 
 3. Rename the `.env.example` file to be `.env` by typing `mv .env.example .env`
 
-4. Add your mongodb URL and secret passphrase to the `.env` file
+4. Add your mongodb URL, secret passphrase, and other required variables to the `.env` file
 
 5. Type `npm start` to run
