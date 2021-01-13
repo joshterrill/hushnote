@@ -1,7 +1,7 @@
 {
   "name": "hushnote",
   "private": true,
-  "version": "2.0.0-a",
+  "version": "3.0.0-a",
   "description": "a privnote-like service with a REST API for sending one-time-use messages via unique URLs",
   "main": "src",
   "scripts": {

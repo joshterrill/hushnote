@@ -53,4 +53,6 @@ Incorrect Pass Response:
 
 4. Add your mongodb URL, secret passphrase, and other required variables to the `.env` file
 
-5. Type `npm start` to run
+5. In order for the server-side encryption and decryption to work correctly, an IV needs to be generated. This is a 16-character string that looks something like this: `f8b43da1eb3cc7c5` which is the example that was put inside of the `.env.example` file. If you would like to generate your own, you can do so by running: `node generate-iv.js`
+
+6. Type `npm start` to run
