@@ -5,7 +5,7 @@ const util = require('../helpers/util.helpers');
 module.exports = ({ db }) => {
   const api = Router();
 
-  api.get('/', (req, res) => {
+  api.get('/', (_req, res) => {
   	res.render('home');
   });
 

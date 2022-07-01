@@ -11,14 +11,14 @@ module.exports = {
   },
 
   encrypt(text, password) {
-    const cipher = crypto.createCipheriv(process.env.ALGORITHM, (password + process.env.SECRET).substr(0, 32), process.env.IV)
+    const cipher = crypto.createCipheriv(process.env.ALGORITHM, this.hash(`${password}${process.env.SECRET}`), process.env.IV)
     let crypted = cipher.update(text, 'utf8', 'hex')
     crypted += cipher.final('hex');
     return crypted;
   },
 
   decrypt(text, password) {
-    const decipher = crypto.createCipheriv(process.env.ALGORITHM, (password + process.env.SECRET).substr(0, 32), process.env.IV)
+    const decipher = crypto.createCipheriv(process.env.ALGORITHM, this.hash(`${password}${process.env.SECRET}`), process.env.IV)
     let dec = decipher.update(text, 'hex', 'utf8')
     dec += decipher.final('utf8');
     return dec;
@@ -26,5 +26,13 @@ module.exports = {
 
   isASCII(str) {
     return /^[\x00-\x7F]*$/.test(str);
+  },
+
+  hash(text) {
+    return crypto.createHash('sha256')
+        .update(text)
+        .digest('hex');
+
+    
   }
 }

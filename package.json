@@ -1,7 +1,7 @@
 {
   "name": "hushnote",
   "private": true,
-  "version": "3.0.1-a",
+  "version": "4.0.0-rc.1",
   "description": "a privnote-like service with a REST API for sending one-time-use messages via unique URLs",
   "main": "src",
   "scripts": {
@@ -25,14 +25,14 @@
   },
   "homepage": "https://github.com/joshterrill/hushnote#readme",
   "dependencies": {
-    "body-parser": "^1.14.1",
-    "crypto": "0.0.3",
-    "dotenv": "^8.2.0",
-    "express": "^4.13.3",
-    "express-handlebars": "^3.0.0",
-    "mongodb": "^3.1.13"
+    "dotenv": "^8.6.0",
+    "express": "^4.18.1",
+    "express-handlebars": "^6.0.6",
+    "mongodb": "^3.7.3"
   },
   "devDependencies": {
-    "nodemon": "^1.9.2"
+    "browserify": "^17.0.0",
+    "mocha": "^10.0.0",
+    "nodemon": "^2.0.18"
   }
 }

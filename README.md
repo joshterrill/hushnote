@@ -1,6 +1,6 @@
-# hushnote
+# Hushnote
 
-A small application written in Node/Express on the server and vanilla javascript on the client. It allows you to send encrypted one-time-use messages to someone via unique URL's that are generated on the server - once someone views the note, the note is destroyed.
+A small application written in Node/Express on the server and vanilla javascript on the client. It allows you to send *client-side encrypted* one-time-use messages to someone via unique URL's that are generated on the server - once someone views the note, it is decrypted on the *client*, then destroyed.
 
 There is also a public API that you can use if you would like to integrate it into your own applications.
 
