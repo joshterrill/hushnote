@@ -22,7 +22,7 @@
 
 
 <script>
-  function submit() {
+  async function submit() {
     if (document.getElementById('ttl').checked && (document.getElementById('ttl-unit').value === 'null' || document.getElementById('ttl-number').value === '')) {
       alert('You must enter a time and unit');
       return;
@@ -32,28 +32,29 @@
     if (document.getElementById('ttl').checked) {
       ttl = document.getElementById('ttl-number').value * document.getElementById('ttl-unit').value;
     }
-    const opts = { note: note, ttl: ttl};
-    fetch('/create', {
-      method: 'post',
+    const { securityKey, iv } = window.hush.generateIVAndSecurityKey();
+    console.log(securityKey, iv);
+    const opts = { note: note, ttl, securityKey, iv };
+    const response = await fetch('/create', {
+      method: 'POST',
       body: JSON.stringify(opts),
       headers: new Headers({
         'Content-Type': 'application/json'
       })
-    }).then(function(response) {
-      return response.json();
-    }).then(function(data) {
-      const urlInput = document.getElementById('url');
-      urlInput.value = data.url;
-      document.getElementById('results').style.display = 'block';
-      urlInput.focus();
-      document.getElementById('note').value = '';
     });
+    const data = await response.json();
+    const urlInput = document.getElementById('url');
+    urlInput.value = data.url;
+    document.getElementById('results').style.display = 'block';
+    urlInput.focus();
+    document.getElementById('note').value = '';
   }
   
   function copyUrl() {
     document.getElementById('url').select();
     document.execCommand('copy');
-    document.getElementById('copy').innerHTML = 'Copied!';
+    document.getElementById('copy').innerText = 'Copied!';
+    setTimeout(() => document.getElementById('copy').innerText = 'Copy', 2000)
   }
 
   function restart() {

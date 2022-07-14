@@ -2,7 +2,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const express = require('express');
 const mongodb = require('mongodb');
-const exphbs = require('express-handlebars');
+const { engine } = require('express-handlebars');
 const api = require('./api');
 const MongoClient = mongodb.MongoClient;
 
@@ -12,17 +12,18 @@ const host = process.env.HOST || '0.0.0.0';
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
-app.use(express.static('public'));
 
-app.engine('handlebars', exphbs({defaultLayout: 'main', layoutsDir: `${__dirname}/views/layouts`}));
+app.use(express.static('src/public'));
+
+app.engine('handlebars', engine({ defaultLayout: 'main', layoutsDir: `${__dirname}/views/layouts` }));
 app.set('view engine', 'handlebars');
-app.set('views', __dirname + '/views/');
+app.set('views', `${__dirname}/views`);
 
-MongoClient.connect(process.env.MONGO_URL, {useNewUrlParser: true, useUnifiedTopology: true}, (err, client) => {
+MongoClient.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
     if (err) return console.error(err);
     app.listen(port, host, () => {
-        console.log('Listening on port ' + port);
-        app.use(api({db: client.db(process.env.MONGO_DB)}));
+        console.log(`Listening on port ${port}`);
+        app.use(api(client.db(process.env.MONGO_DB)));
         app.use((req, res) => {
             res.render('404');
         });

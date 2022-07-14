@@ -3,10 +3,12 @@
   "private": true,
   "version": "4.0.0-rc.1",
   "description": "a privnote-like service with a REST API for sending one-time-use messages via unique URLs",
-  "main": "src",
+  "main": "index.js",
   "scripts": {
-    "dev": "nodemon src/index.js",
-    "start": "node src"
+    "dev": "nodemon index.js",
+    "start": "node index.js",
+    "test": "mocha -r dotenv/config",
+    "browserify:crypto": "./node_modules/browserify/bin/cmd.js -s hush -e src/lib/crypto.js -o src/public/crypto.min.js"
   },
   "repository": {
     "type": "git",
@@ -32,6 +34,7 @@
   },
   "devDependencies": {
     "browserify": "^17.0.0",
+    "chai": "^4.3.6",
     "mocha": "^10.0.0",
     "nodemon": "^2.0.18"
   }
