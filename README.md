@@ -4,7 +4,7 @@ A small application written in Node/Express on the server and vanilla javascript
 
 There is also a public API that you can use if you would like to integrate it into your own applications.
 
-Public URL: https://hushnote.herokuapp.com
+Public URL: https://hush.notur.sh
 
 ## API Endpoints
 
@@ -16,7 +16,7 @@ Body: {"note": "this is a test message"}
 ------------------------------------------
 Success Response:
 {
-  "url": "https://hushnote.herokuapp.com/read/40312d32/160586e0",
+  "url": "https://hush.notur.sh/api/read/40312d32/160586e0",
   "error": null
 }
 ```
@@ -49,10 +49,8 @@ Incorrect Pass Response:
 
 2. Install dependencies by typing `npm install`
 
-3. Rename the `.env.example` file to be `.env` by typing `mv .env.example .env`
+3. Create an `.env` file from a copy of `.env.example` by running `cp .env.example .env`
 
-4. Add your mongodb URL, secret passphrase, and other required variables to the `.env` file
+4. Add your mongodb connection string and other required variables to the `.env` file
 
-5. In order for the server-side encryption and decryption to work correctly, an IV needs to be generated. This is a 16-character string that looks something like this: `f8b43da1eb3cc7c5` which is the example that was put inside of the `.env.example` file. If you would like to generate your own, you can do so by running: `node generate-iv.js`
-
-6. Type `npm start` to run
+5. Type `npm start` to run
