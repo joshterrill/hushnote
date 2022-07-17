@@ -14,7 +14,7 @@
 
 <div id="results" style="font-size: 40px;margin-top:10px;text-align:center;display:none;">
   <div class="input-group">
-    <span class="input-group-addon" id="basic-addon1">URL:</span>
+    <span class="input-group-addon">URL:</span>
     <input type="text" class="form-control" id="url" aria-label="Generated link to share" />
     <span onclick="copyUrl()" id="copy" class="input-group-addon" style="cursor:pointer;" aria-label="Copy shareable link">Copy</span>
   </div>
@@ -33,8 +33,9 @@
       ttl = document.getElementById('ttl-number').value * document.getElementById('ttl-unit').value;
     }
     const { securityKey, iv } = window.hush.generateIVAndSecurityKey();
-    console.log(securityKey, iv);
-    const opts = { note: note, ttl, securityKey, iv };
+    const encryptedNote = window.hush.encrypt(note, iv, securityKey);
+    console.log(encryptedNote);
+    const opts = { note: encryptedNote, ttl, securityKey};
     const response = await fetch('/create', {
       method: 'POST',
       body: JSON.stringify(opts),
@@ -42,9 +43,8 @@
         'Content-Type': 'application/json'
       })
     });
-    const data = await response.json();
     const urlInput = document.getElementById('url');
-    urlInput.value = data.url;
+    urlInput.value = `${location.origin}/read/${securityKey}/${iv}`;
     document.getElementById('results').style.display = 'block';
     urlInput.focus();
     document.getElementById('note').value = '';

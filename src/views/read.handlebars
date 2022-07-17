@@ -1,7 +1,26 @@
 {{#if note}}
-  <h2>Note: </h2>
-  <pre aria-label="{{note}}" class="note-text-container">{{note}}</pre>
+<h2>Note: </h2>
+<pre id="note" class="note-text-container"></pre>
 {{else}}
-  <h2>{{message}}</h2>
+<h2 id="error">{{error}}</h2>
 {{/if}}
 <a href="/">Go back home</a>
+
+{{#if note}}
+  <script>
+    try {
+      const [securityKey, iv] = location.pathname.split('/read/')[1].split('/');
+      const decryptedText = window.hush.decrypt('{{note}}', iv, securityKey);
+      const noteContainer = document.getElementById('note')
+      note.innerText = decryptedText;
+      note.setAttribute('aria-label', decryptedText);
+    } catch (error) {
+      console.error(error);
+      const errorContainer = document.getElementById('error');
+      if (!error?.message) {
+        error.message = 'Unable to read note, note has been destroyed.'
+      }
+      errorContainer.innerText = error.message;
+    }
+  </script>
+{{/if}}

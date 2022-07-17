@@ -38,30 +38,29 @@ module.exports = (db) => {
         const ascii = crypto.isASCII(iv + securityKey);
         await db.collection('notes').deleteOne({securityKey});
         if (ascii) {
-          res.json({note: decryptedNote, message: 'Note has been destroyed.'});
+          res.json({note: decryptedNote, error: 'Note has been destroyed.'});
         } else {
-          res.json({note: null, message: 'Incorrect URL parameters. Note has been destroyed.'})
+          res.json({note: null, error: 'Incorrect URL parameters. Note has been destroyed.'})
         }
       } catch (error) {
+        console.error(error);
         await db.collection('notes').deleteOne({securityKey});
-        res.json({note: null, message: 'Incorrect key. Note has been destroyed.'})
+        res.json({note: null, error: 'Incorrect key. Note has been destroyed.'})
       }
       
     } catch (error) {
       console.error(error);
-      res.json({note: null, message: 'Could not find note, perhaps it has already been destroyed?'});
+      res.json({note: null, error: 'Could not find note, perhaps it has already been destroyed?'});
     }
     
   });
 
   api.post('/create', async (req, res) => {
     try {
-      const { note, ttl, iv, securityKey } = req.body;
-      const encryptedNote = crypto.encrypt(note, iv, securityKey);
-      const url = (process.env.PUBLIC_URL || '') + `/read/${securityKey}/${iv}`;
+      const { note, ttl, securityKey } = req.body;
       const timestamp = new Date().getTime();
-      await db.collection('notes').insertOne({note: encryptedNote, securityKey, ttl, timestamp});
-      res.json({url});
+      await db.collection('notes').insertOne({note, securityKey, ttl, timestamp});
+      res.json();
     } catch (error) {
       console.error(error);
       res.json({error: 'Error creating note, please try again later.'});
@@ -73,25 +72,36 @@ module.exports = (db) => {
     try {
       const encryptedNote = await db.collection('notes').findOne({securityKey});
       if (!encryptedNote) {
-        res.render('read', {note: null, message: 'Could not find note, perhaps it has already been destroyed?'});
-      } else if (encryptedNote.ttl == 0) { // non-timed ttl
-        const destroyUrl = `/read/${securityKey}/${iv}/destroy`;
-        res.render('areyousure', {destroyUrl});
-      } else { // timed note
-        const currentTimestamp = new Date().getTime();
-        if (currentTimestamp >= ((encryptedNote.ttl * 1000) + encryptedNote.timestamp)) { // Expired
-          await db.collection('notes').deleteOne({securityKey});
-          res.render('read', {note: null, message: 'The note you want to read had a time limit and it has expired'});
-        } else {
+        res.render('read', {note: null, error: 'Could not find note, perhaps it has already been destroyed?'});
+      } else {
+        if (encryptedNote.ttl == 0) { // non-timed ttl
           try {
-            const decryptedNote = crypto.decrypt(encryptedNote.note, iv, securityKey);
-            res.render('read', {note: decryptedNote});
+            crypto.decrypt(encryptedNote.note, iv, securityKey);
+            const destroyUrl = `/read/${securityKey}/${iv}/destroy`;
+            res.render('areyousure', {destroyUrl});
           } catch (error) {
+            console.error(error);
             await db.collection('notes').deleteOne({securityKey});
-            res.render('read', {note: null, message: 'Incorrect key. Note has been destroyed.'})
+            res.render('read', {note: null, error: 'Incorrect key. Note has been destroyed.'})
+          }
+        } else { // timed note
+          const currentTimestamp = new Date().getTime();
+          if (currentTimestamp >= ((encryptedNote.ttl * 1000) + encryptedNote.timestamp)) { // Expired
+            await db.collection('notes').deleteOne({securityKey});
+            res.render('read', {note: null, error: 'The note you want to read had a time limit and it has expired'});
+          } else {
+            try {
+              // check to see if note can even be decrypted, but don't send back
+              res.render('read', {note: encryptedNote.note});
+            } catch (error) {
+              console.error(error);
+              await db.collection('notes').deleteOne({securityKey});
+              res.render('read', {note: null, error: 'Incorrect key. Note has been destroyed.'})
+            }
           }
         }
       }
+      
     } catch (error) {
       console.error(error);
       res.render('read', {error: 'An error occurred when retrieving note'});
@@ -101,22 +111,22 @@ module.exports = (db) => {
   api.get('/read/:securityKey/:iv/destroy', async (req, res) => {
     const { securityKey, iv } = req.params;
     try {
-      const encryptedResult = await db.collection('notes').findOne({securityKey});
-      if (!encryptedResult) {
-        res.render('read', {note: null, message: 'Could not find note, perhaps it has already been destroyed?'});
+      const encryptedNote = await db.collection('notes').findOne({securityKey});
+      if (!encryptedNote) {
+        res.render('read', {note: null, error: 'Could not find note, perhaps it has already been destroyed?'});
       } else {
         try {
-          const decryptedNote = crypto.decrypt(encryptedResult.note, iv, securityKey);
           const ascii = crypto.isASCII(securityKey + iv);
           await db.collection('notes').deleteOne({securityKey});
           if (ascii) {
-            res.render('read', {note: decryptedNote, message: 'Note has been destroyed.'});
+            res.render('read', {note: encryptedNote.note, error: 'Note has been destroyed.'});
           } else {
-            res.render('read', {note: null, message: 'Incorrect URL parameters. Note has been destroyed.'})
+            res.render('read', {note: null, error: 'Incorrect URL parameters. Note has been destroyed.'})
           }
         } catch (error) {
+          console.error(error);
           await db.collection('notes').deleteOne({securityKey});
-          res.render('read', {note: null, message: 'Incorrect key. Note has been destroyed.'})
+          res.render('read', {note: null, error: 'Incorrect key. Note has been destroyed.'})
         }
         
       }

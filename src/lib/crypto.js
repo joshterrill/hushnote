@@ -11,7 +11,7 @@ module.exports = {
     encrypt(text, iv, securityKey) {
         iv = Buffer.from(iv);
         securityKey = Buffer.from(securityKey);
-        const cipher = crypto.createCipheriv(process.env.ALGORITHM, securityKey, iv)
+        const cipher = crypto.createCipheriv(process.env.ALGORITHM || 'aes-256-cbc', securityKey, iv)
         let crypted = cipher.update(text, 'utf8', 'hex')
         crypted += cipher.final('hex');
         return crypted;
@@ -20,7 +20,7 @@ module.exports = {
     decrypt(text, iv, securityKey) {
         iv = Buffer.from(iv);
         securityKey = Buffer.from(securityKey);
-        const cipher = crypto.createDecipheriv(process.env.ALGORITHM, securityKey, iv);
+        const cipher = crypto.createDecipheriv(process.env.ALGORITHM || 'aes-256-cbc', securityKey, iv);
         let decrypted = cipher.update(text, 'hex', 'utf8');
 
         decrypted += cipher.final('utf8');
