@@ -2,7 +2,7 @@
 
 A small application written in Node/Express on the server and vanilla javascript on the client. It allows you to send *client-side encrypted* one-time-use messages to someone via unique URL's that are generated on the server - once someone views the note, it is decrypted on the *client*, then destroyed.
 
-<ins>*Although the endpoints the front-end communicates with are client-side encrypted and decrypyted, the API endpoints are not - they are server-side encrypted and decrypted.*</ins>
+<ins>*If you wish to take advantage of the client-side encryption/decryption, feel free to use the web UI hosted at: https://hush.notur.sh - if you want to implement the API in your own applications, endpoints prefixed with /api are still sever-side encrypted.*</ins>
 
 There is also a public API that you can use if you would like to integrate it into your own applications.
 
