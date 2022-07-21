@@ -1,8 +1,8 @@
 <!doctype html>
 <html>
-  <head>
+<head>
     <title>Hushnote</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
     <style>
         .note-text-container {
             white-space: pre-wrap;
@@ -12,13 +12,42 @@
             word-wrap: break-word;
             word-break: normal !important;
         }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+        footer .container div:last-child {
+            margin-left: auto;
+        }
+        small.tagline {
+            font-size: 0.575em;
+            vertical-align: middle;
+        }
     </style>
     <script src="/crypto.min.js"></script>
-  </head>
-  <body>
+</head>
+
+<body>
     <div class="container">
-      <h1>Hushnote <small>- A secure, client-encrypted, one-time messaging app</small></h1>
-      {{{body}}}
+        <h1>Hushnote <small class="text-secondary tagline">- A secure, client-encrypted, one-time messaging app</small></h1>
+        {{{body}}}
     </div>
-  </body>
+    <footer class="footer mt-auto py-3 bg-light d-flex flex-columns">
+        <div class="container d-flex">
+            <div class="justify-content-start">
+                <span class="text-muted text-left">No copyright <span id="year"></span></span>
+            </div>
+            <div class="justify-content-end">
+                <a href="https://github.com/joshterrill/hushnote" target="_new">
+                    <img style="width: 26px;" src="/github.svg" />
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('year').innerText = new Date().getFullYear();
+    </script>
+</body>
 </html>
