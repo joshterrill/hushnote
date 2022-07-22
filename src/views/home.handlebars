@@ -1,6 +1,8 @@
-<textarea aria-label="Type message here" placeholder="Type message here" class="form-control" id="note" rows="14"></textarea>
+<textarea aria-label="Type message here" placeholder="Type message here" class="form-control" id="note"
+    rows="14"></textarea>
 <div class="mt-2 mb-2">
-    <input type="radio" name="message-type" value="onread" checked onchange="change(event)" aria-checked="true" aria-label="Destroy message after being read" /> Destroy message after being read <br />
+    <input type="radio" name="message-type" value="onread" checked onchange="change(event)" aria-checked="true"
+        aria-label="Destroy message after being read" /> Destroy message after being read <br />
     <input id="ttl" type="radio" name="message-type" value="aftertime" onchange="change(event)" /> Destroy message after
     <input class="time-input" id="ttl-number" type="number" style="width: 40px" min="0" disabled />
     <select class="time-input" id="ttl-unit" disabled aria-label="Destroy message after minutes, hours, days">
@@ -14,11 +16,15 @@
 <button class="btn btn-secondary form-control" style="margin-top:8px;" onclick="restart()"
     aria-label="Clear">Clear</button>
 
-<div id="results" style="font-size: 40px;margin-top:10px;text-align:center;display:none;">
-    <div class="input-group">
-        <span class="input-group-addon">URL:</span>
+<div id="results" style="margin-top:10px;text-align:center;display:none;">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text">URL:</span>
+        </div>
         <input type="text" class="form-control" id="url" aria-label="Generated link to share" />
-        <span onclick="copyUrl()" id="copy" class="input-group-addon" style="cursor:pointer;" aria-label="Copy shareable link">Copy</span>
+        <div class="input-group-append">
+            <span class="input-group-text" onclick="copyUrl()" id="copy" style="cursor:pointer;">Copy</span>
+        </div>
     </div>
 </div>
 
