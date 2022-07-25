@@ -53,6 +53,6 @@ Incorrect Pass Response:
 
 3. Create an `.env` file from a copy of `.env.example` by running `cp .env.example .env`
 
-4. Add your mongodb connection string and other required variables to the `.env` file
+4. Add your mongodb connection string and other required variables to the `.env` file. If you wish to have a clean-up job delete any stale notes after a certain amount of days, flip the `.env` variable `DELETE_STALE_MESSSAGES` to `true` and define the `DELETE_STALE_MESSAGES_DAYS` variable top equal how many days you want to keep on hand at any given time
 
 5. Type `npm start` to run
