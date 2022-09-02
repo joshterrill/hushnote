@@ -21,7 +21,7 @@ app.set('view engine', 'handlebars');
 app.set('views', `${__dirname}/views`);
 
 async function createScheduler(db) {
-    scheduler.scheduleJob('0 2 * * *', () => {
+    scheduler.scheduleJob('0 2 * * *', async () => {
         try {
             await db.collection('notes').deleteMany({timestamp: {$lt: getDaysPastDate(+process.env.DELETE_STALE_MESSAGES_DAYS)}})
         } catch (error) {
@@ -33,7 +33,7 @@ async function createScheduler(db) {
 MongoClient.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true }, (err, client) => {
     if (err) return console.error(err);
     app.listen(port, host, () => {
-        console.log(`Listening on port ${port}`);
+        console.log(`Listening on port http://localhost:${port}`);
         const db = client.db(process.env.MONGO_DB);
         app.use(api(db));
         app.use((req, res) => {

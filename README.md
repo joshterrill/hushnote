@@ -1,6 +1,6 @@
 # Hushnote
 
-A small application written in Node/Express on the server and vanilla javascript on the client. It allows you to send *client-side encrypted* one-time-use messages to someone via unique URL's that are generated on the server - once someone views the note, it is decrypted on the *client*, then destroyed.
+A small privnote-like application written in Node/Express on the server and vanilla javascript on the client. It allows you to send *client-side encrypted* one-time-use messages to someone via unique URL's that are generated on the server - once someone views the note, it is decrypted on the *client*, then destroyed.
 
 <ins>*If you wish to take advantage of the client-side encryption/decryption, feel free to use the web UI hosted at: https://hush.dangerous.dev - if you want to implement the API in your own applications, endpoints prefixed with /api are still sever-side encrypted.*</ins>
 
@@ -53,6 +53,6 @@ Incorrect Pass Response:
 
 3. Create an `.env` file from a copy of `.env.example` by running `cp .env.example .env`
 
-4. Add your mongodb connection string and other required variables to the `.env` file. If you wish to have a clean-up job delete any stale notes after a certain amount of days, flip the `.env` variable `DELETE_STALE_MESSSAGES` to `true` and define the `DELETE_STALE_MESSAGES_DAYS` variable top equal how many days you want to keep on hand at any given time
+4. Add your mongodb connection string and other required variables to the `.env` file. If you wish to have a clean-up job delete any stale notes after a certain amount of days, flip the `.env` variable `DELETE_STALE_MESSSAGES` to `true` and define the `DELETE_STALE_MESSAGES_DAYS` variable top equal how many days you want to keep on hand at any given time. If this is set to true, the home page will have some text on it that shows when stale messages will be deleted.
 
 5. Type `npm start` to run
