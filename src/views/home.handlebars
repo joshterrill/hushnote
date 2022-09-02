@@ -1,4 +1,4 @@
-<textarea aria-label="Type message here" placeholder="Type message here" class="form-control" id="note"
+<textarea autofocus aria-label="Type message here" placeholder="Type message here" class="form-control" id="note"
     rows="14"></textarea>
 <div class="mt-2 mb-2">
     <input type="radio" name="message-type" value="onread" checked onchange="change(event)" aria-checked="true"
@@ -15,6 +15,10 @@
 <button class="btn btn-primary form-control" onclick="submit()" aria-label="Submit">Submit</button>
 <button class="btn btn-secondary form-control" style="margin-top:8px;" onclick="restart()"
     aria-label="Clear">Clear</button>
+
+{{#if deleteStaleMessages}}
+    <div class="delete-stale-messages">All messages will be deleted if not read after {{deleteStaleMessagesDays}} days.</div>
+{{/if}}
 
 <div id="results" style="margin-top:10px;text-align:center;display:none;">
     <div class="input-group mb-3">

@@ -6,7 +6,10 @@ module.exports = (db) => {
   const api = Router();
 
   api.get('/', (_req, res) => {
-  	res.render('home');
+  	res.render('home', {
+        deleteStaleMessages: process.env.DELETE_STALE_MESSSAGES == 'true' ? true : false,
+        deleteStaleMessagesDays: +process.env.DELETE_STALE_MESSAGES_DAYS,
+    });
   });
 
   api.post('/api/create', async (req, res) => {
