@@ -17,9 +17,7 @@
             const [securityKey, iv] = location.pathname.split('/read/')[1].split('/');
             const decryptedText = window.hush.decrypt('{{note}}', iv, securityKey);
             const noteContainer = document.getElementById('note');
-            const noteTextarea = document.getElementById('note-textarea');
             note.innerText = decryptedText;
-            noteTextarea.value = decryptedText;
             note.setAttribute('aria-label', decryptedText);
         } catch (error) {
             console.error(error);
@@ -30,9 +28,9 @@
             errorContainer.innerText = error.message;
         }
         function copyNote() {
-            const noteTextarea = document.getElementById('note');
+            const noteCopyContainer = document.getElementById('note');
             const range = document.createRange();
-            range.selectNode(noteTextarea);
+            range.selectNode(noteCopyContainer);
             window.getSelection().removeAllRanges(); 
             window.getSelection().addRange(range); 
             document.execCommand('copy');
