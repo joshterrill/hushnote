@@ -1,6 +1,11 @@
 {{#if note}}
-    <h4>Note: </h4>
-    <pre id="note" class="note-text-container"></pre>
+    <div class="note-header">
+        <h4 class="note-read-header">Note: </h4>
+        <div class="note-copy-header"><a id="copy" href="javascript:copyNote()">Copy</a></span></div>
+    </div>
+    <div class="note-container">
+        <pre id="note" class="note-text-container"></pre>
+    </div>
 {{else}}
     <h2 id="error">{{error}}</h2>
 {{/if}}
@@ -11,8 +16,10 @@
         try {
             const [securityKey, iv] = location.pathname.split('/read/')[1].split('/');
             const decryptedText = window.hush.decrypt('{{note}}', iv, securityKey);
-            const noteContainer = document.getElementById('note')
+            const noteContainer = document.getElementById('note');
+            const noteTextarea = document.getElementById('note-textarea');
             note.innerText = decryptedText;
+            noteTextarea.value = decryptedText;
             note.setAttribute('aria-label', decryptedText);
         } catch (error) {
             console.error(error);
@@ -21,6 +28,17 @@
                 error.message = 'Unable to read note, note has been destroyed.'
             }
             errorContainer.innerText = error.message;
+        }
+        function copyNote() {
+            const noteTextarea = document.getElementById('note');
+            const range = document.createRange();
+            range.selectNode(noteTextarea);
+            window.getSelection().removeAllRanges(); 
+            window.getSelection().addRange(range); 
+            document.execCommand('copy');
+            window.getSelection().removeAllRanges();
+            document.getElementById('copy').innerText = 'Copied!';
+            setTimeout(() => document.getElementById('copy').innerText = 'Copy', 2000)
         }
     </script>
 {{/if}}
