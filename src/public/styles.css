@@ -19,9 +19,11 @@ footer {
 footer .container div:last-child {
     margin-left: auto;
 }
-small.tagline {
-    font-size: 0.575em;
-    vertical-align: middle;
+.tagline {
+    margin-bottom: 8px;
+}
+.header {
+    margin-bottom: 0px;
 }
 .header a {
     text-decoration: none;
@@ -45,4 +47,7 @@ small.tagline {
 .note-copy-header {
     float: right;
     text-align: right;
+}
+.write-message {
+    max-height: 330px;
 }
