@@ -14,7 +14,7 @@ module.exports = (db) => {
 
   api.post('/api/create', async (req, res) => {
     try {
-      const { iv, securityKey, ttl, note } = req.body;
+      let { iv, securityKey, ttl, note } = req.body;
       if (!securityKey) {
         securityKey = crypto.generateIVAndSecurityKey().securityKey;
       }
