@@ -55,6 +55,7 @@
                 'Content-Type': 'application/json'
             })
         });
+        window.scrollTo(0, document.body.scrollHeight);
         const urlInput = document.getElementById('url');
         urlInput.value = `${location.origin}/read/${securityKey}/${iv}`;
         document.getElementById('results').style.display = 'block';

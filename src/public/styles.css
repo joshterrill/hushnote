@@ -51,3 +51,7 @@ footer .container div:last-child {
 .write-message {
     max-height: 330px;
 }
+.container.main {
+    padding: 1rem;
+    padding-bottom: 4rem;
+}
